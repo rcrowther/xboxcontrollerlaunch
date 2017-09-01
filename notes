@@ -1,0 +1,246 @@
+qjoypad
+ConfigurTTION device, GUI. For QT?
+didn'twork for me aat all. But mine is XFCE Miont
+joy2key
+Commandline. Looks good, old, doesn't work.
+evtest
+in maintenance.Same thing as joytest. Avoid.
+
+#bq
+Must specify a target!
+#
+
+--helpdevices
+list devices
+
+-L, --list-controller
+
+-type xbox-mat
+
+       -d, --detach-kernel-driver
+
+Enable basic rumble -R, --test-rumble
+       -b, --buttonmap BUTTON=BUTTON,...
+              Button remapping is available via the --buttonmap option. If you
+              want to swap button A and B start with:
+
+ Button Names
+
+              ┌───────────────────────────┬────────────────────────────┐
+              │Name                       │ Description                │
+              ├───────────────────────────┼────────────────────────────┤
+              │start, back                │ start, back buttons        │
+              ├───────────────────────────┼────────────────────────────┤
+              │guide                      │ big X-button in the middle │
+              │                           │ (Xbox360 only)             │
+              ├───────────────────────────┼────────────────────────────┤
+              │a(1), b(2), x(3), y(4)     │ face buttons               │
+              ├───────────────────────────┼────────────────────────────┤
+              │black, white               │ black,    white    buttons │
+              │                           │ (Xbox1 only, mapped to lb, │
+              │                           │ rb on Xbox360)             │
+              ├───────────────────────────┼────────────────────────────┤
+              │lb(5), rb(6)               │ shoulder  buttons (Xbox360 │
+              │                           │ only,  mapped  to   black, │
+              │                           │ white on Xbox1)            │
+              ├───────────────────────────┼────────────────────────────┤
+              │lt(7), rt(8)               │ analog    trigger   (needs │
+              │                           │ --trigger-as-button    op‐ │
+              │                           │ tion)                      │
+              ├───────────────────────────┼────────────────────────────┤
+              │tl, tr                     │ pressing the left or right │
+              │                           │ analog stick               │
+              ├───────────────────────────┼────────────────────────────┤
+              │du(up),          dd(down), │ dpad   directions   (needs │
+              │dl(left), dr(right)        │ --dpad-as-button option)   │
+              ├───────────────────────────┼────────────────────────────┤
+              │green, red, yellow,  blue, │ guitar buttons             │
+              │orange                     │                            │
+              └───────────────────────────┴────────────────────────────┘
+              Just  like with --ui-buttonmap you can add button filter to each
+              button.
+
+== JS test
+Axis 0 ljoy lr 
+Axis 1 ljoy tp
+Axis 2 rjoy lr
+Axis 3 rjoy tp
+Axis 4 R Trigger (gas)
+Axis 5 L trigger (brake)
+Axis 6 pad lr 
+Axis 7 pad tp
+
+== Button
+0 green
+1 red
+2 blue
+3 orange
+4 left shoulder
+5 right shoulder
+6 back (select)
+7 forward (start)
+8 start (mode)
+9 left joy
+10 right joy
+
+       --four-way-restrictor
+              The  --four-way-restrictor  option allows one to limit the move‐
+              ment on both analogsticks to only  four  directions 
+
+
+       -m, --mouse
+              Lets the controller act as a mouse. It is indendical to:
+
+              $ xboxdrv \
+                --dpad-as-button
+                --deadzone 4000
+                --trigger-as-zaxis
+                --axismap "-y2=y2,-trigger=trigger"
+                --ui-axismap "x1=REL_X:15:20,y1=REL_Y:15:20,y2=REL_WHEEL:5:100,x2=REL_HWHEEL:5:100,trigger=REL_WHEEL:5:100"
+                --ui-buttonmap "a=BTN_LEFT,b=BTN_RIGHT,x=BTN_MIDDLE,y=KEY_ENTER,rb=KEY_PAGEDOWN,lb=KEY_PAGEUP,"
+                --ui-buttonmap "dl=KEY_LEFT,dr=KEY_RIGHT,du=KEY_UP,dd=KEY_DOWN,"
+                --ui-buttonmap "start=KEY_FORWARD,back=KEY_BACK,guide=KEY_ESC,tl=void,tr=void"
+
+
+boxdrv \
+         --ui-clear \
+         --ui-buttonmap a=XK_a,b=XK_b,x=XK_x,y=XK_y \
+         --ui-buttonmap dl=XK_Left,dr=XK_Right,du=XK_Up,dd=XK_Down
+
+
+ USING A SINGLE CONTROLLER
+       Plug in your Xbox360 gamepad and then unload the xpad driver via:
+
+       $ rmmod xpad
+
+       If  you  want  to  permanently  unload  it  add  the  following line to
+       /etc/modprobe.d/blacklist.conf:
+
+       blacklist xpad
+
+       Next you have to load the uinput kernel module which  allows  userspace
+       programs  to create virtual input devices and the joydev module handles
+       the /dev/input/jsX devices:
+
+       $ modprobe uinput
+       $ modprobe joydev
+
+       You also have to make sure that you  have  access  rights  to  /dev/in‐
+       put/uinput,  either  add  yourself to the appropriate group, adjust the
+       permissions or run xboxdrv as root.
+
+       Once ensured that xpad is out of the way and  everything  is  in  place
+       start the userspace driver with:
+
+       $ xboxdrv
+
+       Or  in  case  you  don't have the necessary rights (being in group root
+       should often be enough) start the driver as root via:
+
+       $ sudo xboxdrv
+
+       This will create /dev/input/js0 and allow you  to  access  the  gamepad
+       from any game. To exit the driver press Ctrl-c.
+
+       By default xboxdrv will echo all controller events to the console, this
+       makes it easy to see if things are properly working, but will eat a lot
+       of  CPU, thus it is strongly recomment to disabled that output with the
+       --silent option.
+
+       The trigger buttons are handled by xboxdrv normally as axis, giving you
+       analog  feedback, while this reproduces the Xbox360 controller the most
+       accurately, it will confuse many and only be useful in  a  few,  racing
+       games mainly. So in the majority of cases it is recomment to change the
+       triggers to regular buttons via:
+
+       $ xboxdrv --trigger-as-button
+
+Script
+       #!/bin/sh
+
+       exec xboxdrv \
+         --trigger-as-button -s \
+         -- \
+         your_favorite_game
+
+       # EOF #
+
+       macro  A button can be bound to a macro via:
+
+              xboxdrv \
+                --ui-buttonmap A=macro:/home/juser/.xboxdrv/somefile.macro
+
+              The .macro file has the form of:
+
+              send KEY_LEFTSHIFT 1
+              wait 500
+              send KEY_LEFTSHIFT 0
+
+              All abs, rel and key events can be send from a macro file.
+== tools
+- xev
+raw
+- evtest
+
+ /usr/include/linux/input.h
+ --help-x11keysym
+
+==============================+
+useful!
+http://steamcommunity.com/sharedfiles/filedetails/?id=759868839
+https://www.halopedia.org/Xbox_controller_layout
+== Rumble
+       -r, --rumble L,R
+              Set  the  speed for both rumble motors. Values from 0 to 255 are
+              accepted, the default is 0,0.
+
+Now swnd events...
+
+
+== Tuxracer
+http://guides.gamepressure.com/gtav/gfx/word/71110232.png
+
+left trigger = brake 
+right trigger = accellerate
+left shoulder = jump (space)
+right shoulder = trick (T)
+left joy = left/right
+
+pad = volume up/down/
+paddown = screenshot (S)
+right joy = change view (1,2,3)
+
+
+back = hud (H)
+select = (select)
+forward = pause (P)
+
+a = change music
+b = ?
+
+sudo xboxdrv –detach-kernel-driver --ui-clear \
+--silent --test-rumble --dpad-as-button --deadzone 4000 \
+--ui-axismap "x1=XK_Left:XK_Right,y1=void,y2=XK_1:XK_4,x2=XK_1:XK_3,lt=XK_Down,rt=XK_Up" \
+--ui-buttonmap "a=void,b=void,x=void,y=void,lb=XK_space, rb=XK_t," \
+--ui-buttonmap "dl=XK_XF86AudioLowerVolume,dr=XK_XF86AudioRaiseVolume,du=void,dd=XK_s," \
+--ui-buttonmap "start=XK_Return,back=XK_p,guide=XK_h,tl=void,tr=void"
+
+
+==Tuxcart
+supertuxcart
+
+http://guides.gamepressure.com/gtav/gfx/word/71110232.png
+left trigger = brake 
+right trigger = acellerate
+lefft shoulder shoot
+left joy = left/right
+left = ?
+right = pause
+right joy = camera
+x, y = weapon
+
+==supertux
+supertux2
+
+== tuxtype
+tuxtype
