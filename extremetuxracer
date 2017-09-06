@@ -1,0 +1,57 @@
+#!/bin/sh
+
+# - ok
+# L/R
+# jump
+# reverse
+# audio
+# camera
+# heads up
+# pause
+# left/right trigger
+# Trick?
+
+# - bad
+# screenshot? (how works-seems to pause?)
+
+#######################
+# Classic XBox layout #
+#######################
+
+## Navigation
+# Move round - left joystick
+# Choose - right select button
+# Escape - XBox button
+
+## Play
+# Left/Right - left joystick
+# Faster - right trigger
+# Slower - left trigger
+
+# Pause - left menu button
+
+# Jump - left shoulder button
+# Back in Time - right shoulder button
+
+# View near Tux - right joystick up
+# View above Tux - right joystick down
+# View default - right joystick click
+
+# Toggle info display - 'x' button 
+# Increase music volume - pad right
+# Decrease music volume - pad left
+
+#rmmod -xpad
+#--test-rumble \
+exec xboxdrv --detach-kernel-driver --ui-clear --silent \
+--four-way-restrictor --dpad-as-button --trigger-as-button --deadzone 4000 \
+--ui-axismap "x1=XK_Left:XK_Right,y1=XK_Up:XK_Down,y2=XK_3:XK_1,x2=void," \
+--ui-buttonmap "du=void,dd=void,dl=XK_XF86AudioLowerVolume,dr=XK_XF86AudioRaiseVolume," \
+--ui-buttonmap "back=XK_p,guide=XK_Escape,start=XK_Return," \
+--ui-buttonmap "tl=XK_space,tr=XK_2" \
+--ui-buttonmap "a=void,b=void,x=XK_h,y=void," \
+--ui-buttonmap "lb=XK_space,rb=XK_r," \
+--ui-buttonmap "lt=KEY_DOWN,rt=KEY_UP" \
+-- /usr/games/etr
+ 
+# EOF #

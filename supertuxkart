@@ -1,0 +1,58 @@
+#!/bin/sh
+
+
+##################
+# Tuxcart layout #
+##################
+
+# Tuxcart detects the XPad driver and runs from my Xbox 360 controller
+# The layout is locked. Could use the program's config, but prefer override
+# with xboxdrv?
+
+## Navigate
+# Move round - left joystick
+# Choose - right select button
+# Escape - XBox button
+
+## Play
+# Left/Right - pad
+# Faster - right trigger
+# Slower - left trigger
+# Fire - left shoulder
+# Skid - right shoulder
+
+
+# Look Back - right joystick down
+
+# Nitro (no effect?) - 'a' button
+# Rescue (no effect?) - 'x' button 
+
+# Pause - XBox button
+###################
+## Key/Cursor navigation
+
+# Tab - left menu button
+# ESC - XBox button
+# ENTER - right select button
+
+
+# Unused
+#  - right trigger
+#  - left trigger
+#  - joystick click
+
+# To Map?
+#XK_Menu
+#NB: KEY_Q is used only to provide a vsslid keymap, means nothing!
+exec xboxdrv --detach-kernel-driver --ui-clear --silent \
+--four-way-restrictor --dpad-as-button --trigger-as-button --deadzone 4000 \
+--ui-axismap "x1=XK_Left:XK_Right,y1=XK_Up:XK_Down,x2=void,y2=KEY_Q:KEY_B," \
+--ui-buttonmap "du=void,dd=void,dl=XK_Left,dr=XK_Right," \
+--ui-buttonmap "back=void,guide=XK_Escape,start=XK_Return," \
+--ui-buttonmap "tl=void,tr=void" \
+--ui-buttonmap "a=void,b=void,x=XK_n,y=XK_BackSpace," \
+--ui-buttonmap "lb=XK_space,rb=XK_v," \
+--ui-buttonmap "lt=XK_Down,rt=XK_Up" \
+-- /usr/games/supertuxkart
+ 
+# EOF #

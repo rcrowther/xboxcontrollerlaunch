@@ -1,0 +1,50 @@
+#!/bin/sh
+
+
+###########################
+# Generic keyboard layout #
+###########################
+
+# A very different mapping to the Xboxdrv example. Still a wierd concept!
+
+## Pointer Navigation
+# Move round - left joystick
+# Fine movement - pad
+
+# Left mouse - 'x' button
+# Right mouse - 'b' button
+
+
+## Key/Cursor navigation
+# Left/Right/Up/Down - right joystick
+
+
+# Tab - left menu button
+# ESC - XBox button
+# ENTER - right select button
+
+# Scroll up - 'y' button
+# Scroll down - 'a' button
+
+# SHIFT Left - left shoulder button
+# CTRL Left - right shoulder button
+
+# Unused
+#  - right trigger
+#  - left trigger
+#  - joystick click
+
+# To Map?
+#XK_Menu
+#save
+exec xboxdrv --detach-kernel-driver --ui-clear --silent \
+--dpad-as-button --trigger-as-button --deadzone 6000 \
+--ui-axismap "x1=rel:REL_X,y1=rel:REL_Y,x2=XK_Left:XK_Right,y2=XK_Up:XK_Down," \
+--ui-buttonmap "du=rel:REL_Y:-4:30,dd=REL_Y:4:30,dl=REL_X:-4:30,dr=REL_X:4:30," \
+--ui-buttonmap "back=KEY_TAB,guide=XK_Escape,start=XK_Return," \
+--ui-buttonmap "tl=void,tr=void" \
+--ui-buttonmap "a=REL_WHEEL:-1:100,b=BTN_RIGHT,x=BTN_LEFT,y=REL_WHEEL:1:100," \
+--ui-buttonmap "lb=XK_Shift_L,rb=XK_Control_L," \
+--ui-buttonmap "lt=void,rt=void" 
+ 
+# EOF #

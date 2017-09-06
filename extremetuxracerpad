@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# - ok
+# L/R
+# jump
+# reverse
+# audio
+# camera
+# heads up
+# pause
+# left/right trigger
+# Trick?
+
+# - bad
+# screenshot? (how works-seems to pause?)
+
+#######################
+# XBox button layout #
+#######################
+
+## Navigation
+# Move round - pad
+# Choose - right select button
+# Escape - XBox button
+
+## Play
+# Left/Right - pad
+# Faster - 'y' button
+# Slower - 'a' button
+
+# Pause - left menu button
+
+# Jump - 'x' button
+
+
+
+
+#rmmod -xpad
+#--test-rumble \
+exec xboxdrv --detach-kernel-driver --ui-clear --silent \
+--four-way-restrictor --dpad-as-button --deadzone 4000 \
+--ui-axismap "x1=void,y1=void,y2=void,x2=void," \
+--ui-buttonmap "du=XK_Up,dd=XK_Down,dl=XK_Left,dr=XK_Right," \
+--ui-buttonmap "back=XK_p,guide=XK_Escape,start=XK_Return," \
+--ui-buttonmap "tl=void,tr=void" \
+--ui-buttonmap "a=XK_Down,b=void,x=XK_space,y=XK_Up," \
+--ui-buttonmap "lb=void,rb=void," \
+--ui-buttonmap "lt=void,rt=void" \
+-- /usr/games/etr
+ 
+# EOF #
